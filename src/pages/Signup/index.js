@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import request from "../../api/core";
-import { Input, Main } from "./style";
+import { Main } from "../style";
+import { Input } from "./style";
 
 const SignUp = () => {
   const navigate = useNavigate();

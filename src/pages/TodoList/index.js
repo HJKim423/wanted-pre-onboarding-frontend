@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTodo, deleteTodo, getTodos, updateTodo } from "../../api/todo";
-import { Main } from "../Signup/style";
+import { getJWT } from "../../utils/utility";
+import { Main } from "../style";
 import { AddTodo } from "./style";
 
 const TodoList = () => {
+  //   const token = JSON.parse(localStorage.getItem("jwt"));
+  const token = getJWT();
   const navigate = useNavigate();
   const [newTodo, setNewTodo] = useState("");
   const [todoLists, setTodoLists] = useState([]);
@@ -13,27 +16,34 @@ const TodoList = () => {
   const [checkedItems, setCheckedItems] = useState(new Map());
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
     if (!token) {
       navigate("/signin");
+    } else {
+      getTodoLists();
     }
-    getTodoLists();
   }, []);
 
+  useEffect(() => {
+    todoLists.map(v => {
+      checkedItems.set(v.id, v.isCompleted);
+    });
+    console.log(checkedItems);
+  }, [todoLists]);
+
   const addNewTodo = async () => {
-    await createTodo(newTodo);
+    await createTodo(newTodo, token);
     setNewTodo("");
     getTodoLists();
   };
 
   const getTodoLists = async () => {
-    const data = await getTodos();
+    const data = await getTodos(token);
     setTodoLists([...data]);
   };
 
   const updateTodoLists = async item => {
     if (item.todo) {
-      await updateTodo(modifyText, item.isCompleted, item.id);
+      await updateTodo(modifyText, item.isCompleted, item.id, token);
       setModifyId(0);
       getTodoLists();
     } else {
@@ -44,24 +54,17 @@ const TodoList = () => {
   const updateCheckBox = async item => {
     if (item.isCompleted) {
       item.isCompleted = false;
-      await updateTodo(item.todo, false, item.id);
+      await updateTodo(item.todo, false, item.id, token);
     } else {
       item.isCompleted = true;
-      await updateTodo(item.todo, true, item.id);
+      await updateTodo(item.todo, true, item.id, token);
     }
     setCheckedItems(prev => new Map(prev).set(item.id, item.isCompleted));
     getTodoLists();
   };
 
-  useEffect(() => {
-    todoLists.map(v => {
-      checkedItems.set(v.id, v.isCompleted);
-    });
-    console.log(checkedItems);
-  }, [todoLists]);
-
   const deleteTodoList = async id => {
-    await deleteTodo(id);
+    await deleteTodo(id, token);
     getTodoLists();
   };
 

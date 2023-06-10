@@ -6,7 +6,6 @@ const request = axios.create({
 
   headers: {
     accept: "application/json",
-    // Authorization: `Bearer ${window.localStorage.getItem(JWT_KEY)}`,
   },
 });
 

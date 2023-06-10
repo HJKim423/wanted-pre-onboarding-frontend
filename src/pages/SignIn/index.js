@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import request from "../../api/core";
 import { saveJWT } from "../../utils/utility";
-import { Input, Main } from "./style";
+import { Input } from "./style";
+import { Main } from "../style";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -30,8 +31,8 @@ const SignIn = () => {
         })
         .then(res => {
           if (res.status === 200) {
-            navigate("/todo");
             saveJWT(res.data.access_token);
+            navigate("/todo");
             alert("로그인에 성공하였습니다.");
           }
         });
