@@ -11,6 +11,14 @@ const SignUp = () => {
   const [passEmail, setPassEmail] = useState(false);
   const [passPassword, setPassPassword] = useState(false);
 
+  useEffect(() => {
+    if (passEmail && passPassword) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [passEmail, passPassword]);
+
   const postSignUp = async () => {
     try {
       const url = `/auth/signup`;
@@ -47,14 +55,6 @@ const SignUp = () => {
     }
     setPassword(e.target.value);
   };
-
-  useEffect(() => {
-    if (passEmail && passPassword) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [passEmail, passPassword]);
 
   return (
     <Main>

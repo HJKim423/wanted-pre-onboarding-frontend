@@ -12,6 +12,14 @@ const SignIn = () => {
   const [passEmail, setPassEmail] = useState(false);
   const [passPassword, setPassPassword] = useState(false);
 
+  useEffect(() => {
+    if (passEmail && passPassword) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [passEmail, passPassword]);
+
   const postSignIn = async () => {
     try {
       const url = `/auth/signin`;
@@ -50,13 +58,6 @@ const SignIn = () => {
     setPassword(e.target.value);
   };
 
-  useEffect(() => {
-    if (passEmail && passPassword) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [passEmail, passPassword]);
   return (
     <Main>
       <div>로그인</div>

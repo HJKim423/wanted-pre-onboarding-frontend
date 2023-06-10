@@ -10,6 +10,15 @@ const TodoList = () => {
   const [todoLists, setTodoLists] = useState([]);
   const [modifyId, setModifyId] = useState(0);
   const [modifyText, setModifyText] = useState("");
+  const [checkedItems, setCheckedItems] = useState(new Map());
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      navigate("/signin");
+    }
+    getTodoLists();
+  }, []);
 
   const addNewTodo = async () => {
     await createTodo(newTodo);
@@ -19,17 +28,37 @@ const TodoList = () => {
 
   const getTodoLists = async () => {
     const data = await getTodos();
-    setTodoLists([todoLists, ...data]);
+    setTodoLists([...data]);
   };
 
   const updateTodoLists = async item => {
     if (item.todo) {
-      const data = await updateTodo(modifyText, true, item.id);
-      console.log(item, data);
+      await updateTodo(modifyText, item.isCompleted, item.id);
       setModifyId(0);
       getTodoLists();
+    } else {
+      console.log("에러");
     }
   };
+
+  const updateCheckBox = async item => {
+    if (item.isCompleted) {
+      item.isCompleted = false;
+      await updateTodo(item.todo, false, item.id);
+    } else {
+      item.isCompleted = true;
+      await updateTodo(item.todo, true, item.id);
+    }
+    setCheckedItems(prev => new Map(prev).set(item.id, item.isCompleted));
+    getTodoLists();
+  };
+
+  useEffect(() => {
+    todoLists.map(v => {
+      checkedItems.set(v.id, v.isCompleted);
+    });
+    console.log(checkedItems);
+  }, [todoLists]);
 
   const deleteTodoList = async id => {
     await deleteTodo(id);
@@ -41,14 +70,6 @@ const TodoList = () => {
     setModifyText(item.todo);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (!token) {
-      navigate("/signin");
-    }
-    getTodoLists();
-  }, []);
-
   return (
     <Main>
       <div>TODOLIST</div>
@@ -58,18 +79,11 @@ const TodoList = () => {
             // 수정 시
             <>
               <label>
-                {item.isCompleted ? (
-                  <input
-                    type="checkbox"
-                    checked
-                    onChange={() => updateTodo(item.todo, false, item.id)}
-                  />
-                ) : (
-                  <input
-                    type="checkbox"
-                    onClick={() => updateTodo(item.todo, true, item.id)}
-                  />
-                )}
+                <input
+                  type="checkbox"
+                  checked={checkedItems.get(item.id)}
+                  onChange={() => updateCheckBox(item)}
+                />
                 <input
                   data-testid="modify-input"
                   value={modifyText || item.todo}
@@ -90,21 +104,14 @@ const TodoList = () => {
               </button>
             </>
           ) : (
-            // 비수정
+            // 비수정시
             <>
               <label>
-                {item.isCompleted ? (
-                  <input
-                    type="checkbox"
-                    checked
-                    onChange={() => updateTodo(item.todo, false, item.id)}
-                  />
-                ) : (
-                  <input
-                    type="checkbox"
-                    onClick={() => updateTodo(item.todo, true, item.id)}
-                  />
-                )}
+                <input
+                  type="checkbox"
+                  checked={checkedItems.get(item.id)}
+                  onChange={() => updateCheckBox(item)}
+                />
                 <span>{item.todo}</span>
               </label>
               <button
