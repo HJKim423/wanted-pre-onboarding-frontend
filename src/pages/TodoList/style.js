@@ -10,7 +10,7 @@ export const AddTodo = styled.div`
 
 export const TodoLists = styled.div`
   height: 40vh;
-  width: 300px;
+  width: 350px;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
@@ -21,6 +21,9 @@ export const TodoLists = styled.div`
   scrollbar-width: none; /* 파이어폭스 */
 `;
 
-export const TodoItem = styled.li`
+export const TodoItem = styled.div`
   padding: 10px;
+  button {
+    float: right;
+  }
 `;
