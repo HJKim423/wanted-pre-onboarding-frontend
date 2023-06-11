@@ -6,7 +6,6 @@ import { Main } from "../style";
 import { AddTodo } from "./style";
 
 const TodoList = () => {
-  //   const token = JSON.parse(localStorage.getItem("jwt"));
   const token = getJWT();
   const navigate = useNavigate();
   const [newTodo, setNewTodo] = useState("");
@@ -27,18 +26,17 @@ const TodoList = () => {
     todoLists.map(v => {
       checkedItems.set(v.id, v.isCompleted);
     });
-    console.log(checkedItems);
   }, [todoLists]);
+
+  const getTodoLists = async () => {
+    const data = await getTodos(token);
+    setTodoLists([...data]);
+  };
 
   const addNewTodo = async () => {
     await createTodo(newTodo, token);
     setNewTodo("");
     getTodoLists();
-  };
-
-  const getTodoLists = async () => {
-    const data = await getTodos(token);
-    setTodoLists([...data]);
   };
 
   const updateTodoLists = async item => {
@@ -89,7 +87,7 @@ const TodoList = () => {
                 />
                 <input
                   data-testid="modify-input"
-                  value={modifyText || item.todo}
+                  value={modifyText}
                   onChange={e => setModifyText(e.target.value)}
                 />
               </label>
