@@ -110,7 +110,7 @@ const TodoList = () => {
               <label>
                 <input
                   type="checkbox"
-                  checked={checkedItems.get(item.id)}
+                  checked={checkedItems.get(item.id) ?? false}
                   onChange={() => updateCheckBox(item)}
                 />
                 <span>{item.todo}</span>
