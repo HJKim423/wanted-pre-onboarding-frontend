@@ -77,59 +77,61 @@ const TodoList = () => {
       <TodoLists>
         {todoLists.map((item, index) => (
           <TodoItem key={index}>
-            {item.id === modifyId ? (
-              // 수정 시
-              <>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={checkedItems.get(item.id)}
-                    onChange={() => updateCheckBox(item)}
-                  />
-                  <input
-                    data-testid="modify-input"
-                    value={modifyText}
-                    onChange={e => setModifyText(e.target.value)}
-                  />
-                </label>
-                <button
-                  data-testid="submit-button"
-                  onClick={() => updateTodoLists(item)}
-                >
-                  제출
-                </button>
-                <button
-                  data-testid="cancel-button"
-                  onClick={() => setModifyId(0)}
-                >
-                  취소
-                </button>
-              </>
-            ) : (
-              // 비수정시
-              <>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={checkedItems.get(item.id) ?? false}
-                    onChange={() => updateCheckBox(item)}
-                  />
-                  <span>{item.todo}</span>
-                </label>
-                <button
-                  data-testid="modify-button"
-                  onClick={() => handleModifyButton(item)}
-                >
-                  수정
-                </button>
-                <button
-                  data-testid="delete-button"
-                  onClick={() => deleteTodoList(item.id)}
-                >
-                  삭제
-                </button>
-              </>
-            )}
+            <li>
+              {item.id === modifyId ? (
+                // 수정 시
+                <>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={checkedItems.get(item.id)}
+                      onChange={() => updateCheckBox(item)}
+                    />
+                    <input
+                      data-testid="modify-input"
+                      value={modifyText}
+                      onChange={e => setModifyText(e.target.value)}
+                    />
+                  </label>
+                  <button
+                    data-testid="submit-button"
+                    onClick={() => updateTodoLists(item)}
+                  >
+                    제출
+                  </button>
+                  <button
+                    data-testid="cancel-button"
+                    onClick={() => setModifyId(0)}
+                  >
+                    취소
+                  </button>
+                </>
+              ) : (
+                // 비수정시
+                <>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={checkedItems.get(item.id) ?? false}
+                      onChange={() => updateCheckBox(item)}
+                    />
+                    <span>{item.todo}</span>
+                  </label>
+                  <button
+                    data-testid="modify-button"
+                    onClick={() => handleModifyButton(item)}
+                  >
+                    수정
+                  </button>
+                  <button
+                    data-testid="delete-button"
+                    onClick={() => deleteTodoList(item.id)}
+                  >
+                    삭제
+                  </button>
+                </>
+              )}
+            </li>
           </TodoItem>
         ))}
       </TodoLists>
