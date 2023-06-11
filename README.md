@@ -111,6 +111,13 @@ https://github.com/HJKim423/wanted-pre-onboarding-frontend/assets/76723593/230e0
 
 
 https://github.com/HJKim423/wanted-pre-onboarding-frontend/assets/76723593/37ce2476-7529-4c59-8a5a-86de7eec6028
+  
+-----------
+  
+## 📚 사용한 라이브러리
+  - react-router-dom
+  - styled-components
+  - axios
 
 
 
