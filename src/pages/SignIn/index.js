@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import request from "../../api/core";
-import { saveJWT } from "../../utils/utility";
-import { Input } from "./style";
-import { Main } from "../style";
+import { getJWT, saveJWT } from "../../utils/utility";
+import { ButtonSection } from "./style";
+import { AlertText, Main, Title, Input } from "../style";
 
 const SignIn = () => {
+  const token = getJWT();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [passEmail, setPassEmail] = useState(false);
   const [passPassword, setPassPassword] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      navigate("/todo");
+    }
+  }, []);
 
   useEffect(() => {
     if (passEmail && passPassword) {
@@ -61,7 +68,7 @@ const SignIn = () => {
 
   return (
     <Main>
-      <div>로그인</div>
+      <Title>로그인</Title>
       <Input>
         <label htmlFor="email">이메일</label>
         <input
@@ -69,6 +76,9 @@ const SignIn = () => {
           onChange={onCheckEmail}
           value={email}
         />
+        {!passEmail && email.length > 0 && (
+          <AlertText>@를 포함해주세요.</AlertText>
+        )}
       </Input>
 
       <Input>
@@ -79,17 +89,20 @@ const SignIn = () => {
           value={password}
           type="password"
         />
+        {!passPassword && password.length > 0 && (
+          <AlertText>8자 이상 입력해주세요.</AlertText>
+        )}
       </Input>
 
-      {isDisabled ? (
-        <button data-testid="signin-button" disabled>
+      <ButtonSection>
+        <button
+          data-testid="signin-button"
+          disabled={isDisabled}
+          onClick={postSignIn}
+        >
           로그인
         </button>
-      ) : (
-        <button data-testid="signin-button" onClick={postSignIn}>
-          로그인
-        </button>
-      )}
+      </ButtonSection>
     </Main>
   );
 };

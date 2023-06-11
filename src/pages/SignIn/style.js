@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
-export const Input = styled.div`
-  display: flex;
-  padding: 10px;
-  input {
-    margin-left: 10px;
+export const ButtonSection = styled.div`
+  margin-top: 20px;
+  button {
+    padding: 5px 20px;
+    font-size: 16px;
+    font-weight: 700;
   }
 `;
